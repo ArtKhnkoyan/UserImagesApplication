@@ -39,12 +39,11 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_update_user_data);
 
         bindIds();
-        user = new User();
-        imageDbManager = new UserImageDbManager(this, user);
+
+        imageDbManager = new UserImageDbManager(this);
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-
     }
 
     private void bindIds() {
@@ -102,7 +101,7 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
         }
 
         if (!cancel) {
-            updateUserData(userEmail);
+            updateUserData();
             Intent intent = new Intent(UpdateUserDataActivity.this, ProfileActivity.class);
             intent.putExtra("email", userEmail);
             startActivity(intent);
@@ -115,12 +114,13 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
         return age >= 1 && age < 100;
     }
 
-    private void updateUserData(String userEmail) {
+    private void updateUserData() {
+        user = new User();
         user.setName(userName);
         user.setSurName(userSurName);
         user.setAge(userAge);
         user.setGender(Gender.valueOf(selectGenderType));
-        imageDbManager.updateUserData(userEmail);
+        imageDbManager.updateUserData(user);
     }
 
     @Override

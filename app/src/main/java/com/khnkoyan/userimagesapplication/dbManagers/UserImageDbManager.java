@@ -17,7 +17,6 @@ public class UserImageDbManager {
 
     private Context context;
     private UserImageDb userMessengerDb;
-    private User user;
     private SQLiteDatabase db;
 
     public UserImageDbManager(Context context) {
@@ -25,17 +24,12 @@ public class UserImageDbManager {
         this.userMessengerDb = new UserImageDb(context);
     }
 
-    public UserImageDbManager(Context context, User user) {
-        this(context);
-        this.user = user;
-    }
-
     public void closeDb() {
         userMessengerDb.close();
     }
 
 
-    public void saveUserData() {
+    public void saveUserData(User user) {
         db = userMessengerDb.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(UserImageDb.USER_NAME, user.getName());
@@ -74,7 +68,7 @@ public class UserImageDbManager {
         db.insert(UserImageDb.TABLE_USER_IMAGE, null, contentValues);
     }
 
-    public void updateUserData(String userEmail) {
+    public void updateUserData(User user) {
         db = userMessengerDb.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(UserImageDb.USER_NAME, user.getName());
@@ -83,7 +77,7 @@ public class UserImageDbManager {
         contentValues.put(UserImageDb.USER_GENDER, String.valueOf(user.getGender()));
         // update rows
         db.update(UserImageDb.TABLE_USER, contentValues, UserImageDb.USER_EMAIL + " =?",
-                new String[]{userEmail});
+                new String[]{user.getEmail()});
     }
 
     /**
@@ -105,10 +99,10 @@ public class UserImageDbManager {
      * @return
      */
 
-    public boolean checkUserEmail(String email) {
+    public boolean checkUser(String email) {
         db = userMessengerDb.getReadableDatabase();
 
-        String[] columns = {UserImageDb.USER_ID};
+        String[] columns = {UserImageDb.USER_EMAIL};
         String selection = UserImageDb.USER_EMAIL + " =?";
         String[] selectionArgs = {email};
 
@@ -133,17 +127,19 @@ public class UserImageDbManager {
     public boolean checkUser(String email, String password) {
         db = userMessengerDb.getReadableDatabase();
 
-        String[] columns = {UserImageDb.USER_ID};
-        String selection = UserImageDb.USER_EMAIL + " =?" + " AND " + UserImageDb.USER_PASSWORD + " = ?";
+        String[] columns = {UserImageDb.USER_EMAIL, UserImageDb.USER_PASSWORD};
+        String selection = UserImageDb.USER_EMAIL + " =?" + " and " + UserImageDb.USER_PASSWORD + " =?";
         String[] selectionArgs = {email, password};
 
         Cursor cursor = db.query(UserImageDb.TABLE_USER,
                 columns, selection, selectionArgs, null, null, null);
 
-        if (cursor.getCount() > 0) {
-            cursor.close();
-            return true;
-        }
+            if (cursor.moveToFirst()) {
+                if (cursor.getCount() > 0) {
+                    cursor.close();
+                    return true;
+                }
+            }
         cursor.close();
         return false;
     }

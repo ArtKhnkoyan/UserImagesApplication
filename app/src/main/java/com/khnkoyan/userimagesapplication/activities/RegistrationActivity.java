@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,15 +12,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.khnkoyan.userimagesapplication.MyMessageDigest;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.Gender;
 import com.khnkoyan.userimagesapplication.models.User;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-public class RegistrationActivity extends AppCompatActivity  implements View.OnClickListener{
+public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtName;
     private EditText edtSurName;
@@ -42,9 +39,8 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
     private String userPassword;
     private String passwordMD5;
     private String userCheckPassword;
-    private User user;
-
     private UserImageDbManager imageDbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +51,7 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bindIds();
 
-        user = new User();
-        imageDbManager = new UserImageDbManager(this, user);
+        imageDbManager = new UserImageDbManager(this);
     }
 
     private void bindIds() {
@@ -80,7 +75,6 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         userEmail = edtEmail.getText().toString();
         userPassword = edtPassword.getText().toString();
         userCheckPassword = edtCheckPassword.getText().toString();
-        passwordMD5 = makeMD5(userPassword);
 
         if (!edtAge.getText().toString().isEmpty()) {
             userAge = Integer.parseInt(edtAge.getText().toString());
@@ -143,7 +137,7 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         }
 
         if (!cancel) {
-            boolean emailExists = imageDbManager.checkUserEmail(userEmail);
+            boolean emailExists = imageDbManager.checkUser(userEmail);
             if (!emailExists) {
                 saveUserData();
                 Intent intent = new Intent(RegistrationActivity.this, ProfileActivity.class);
@@ -172,6 +166,8 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
     }
 
     private void saveUserData() {
+        User user = new User();
+        passwordMD5 = MyMessageDigest.makeMD5(userPassword);
         user.setName(userName);
         user.setSurName(userSurName);
         user.setAge(userAge);
@@ -179,26 +175,13 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         user.setEmail(userEmail);
         user.setPassword(passwordMD5);
         user.setUserLoggedIn(true);
-        imageDbManager.saveUserData();
+//        ImageAsyncTask imageAsyncTask = new ImageAsyncTask(imageDbManager);
+//        imageAsyncTask.execute(user);
+
+        imageDbManager.saveUserData(user);
     }
 
-    private String makeMD5(String s) {
-        String a = null;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(s.getBytes());
-            byte[] digest = messageDigest.digest();
-            StringBuffer strBuffer = new StringBuffer();
-            for (byte b : digest) {
-                strBuffer.append(String.format("%02X", b & 0xff));
-            }
-            a = strBuffer.toString();
-            Log.i("myLog", "strBuffer: " + a);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return a;
-    }
+
 
     @Override
     protected void onDestroy() {

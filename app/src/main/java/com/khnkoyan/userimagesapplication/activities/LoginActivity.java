@@ -14,10 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.khnkoyan.userimagesapplication.MyMessageDigest;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -53,8 +54,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     private boolean attemptLogin() {
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+//        mEmailView.setError(null);
+//        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         email = mEmailView.getText().toString();
@@ -80,14 +81,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return false;
         }
         if (!cancel) {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            boolean emailAndPassExists = imageDbManager.checkUser(email, password);
+            String passwordMD5 = MyMessageDigest.makeMD5(password);
+
+            boolean emailAndPassExists = imageDbManager.checkUser(email, passwordMD5);
             if (emailAndPassExists) {
                 showProgress(true);
                 imageDbManager.setLogin(true, email);
                 Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                // intent.putExtra("user", user);
                 intent.putExtra("email", email);
                 startActivity(intent);
             } else {
