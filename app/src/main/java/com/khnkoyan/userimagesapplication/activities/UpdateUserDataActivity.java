@@ -120,7 +120,7 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
         user.setSurName(userSurName);
         user.setAge(userAge);
         user.setGender(Gender.valueOf(selectGenderType));
-        imageDbManager.updateUserData(user);
+        imageDbManager.updateUserData(user, userEmail);
     }
 
     @Override

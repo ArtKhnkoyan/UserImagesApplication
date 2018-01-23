@@ -68,7 +68,7 @@ public class UserImageDbManager {
         db.insert(UserImageDb.TABLE_USER_IMAGE, null, contentValues);
     }
 
-    public void updateUserData(User user) {
+    public void updateUserData(User user, String userEmail) {
         db = userMessengerDb.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(UserImageDb.USER_NAME, user.getName());
@@ -77,7 +77,7 @@ public class UserImageDbManager {
         contentValues.put(UserImageDb.USER_GENDER, String.valueOf(user.getGender()));
         // update rows
         db.update(UserImageDb.TABLE_USER, contentValues, UserImageDb.USER_EMAIL + " =?",
-                new String[]{user.getEmail()});
+                new String[]{userEmail});
     }
 
     /**

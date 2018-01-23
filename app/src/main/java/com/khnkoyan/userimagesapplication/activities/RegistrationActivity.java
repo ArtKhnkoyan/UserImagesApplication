@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.khnkoyan.userimagesapplication.MyMessageDigest;
 import com.khnkoyan.userimagesapplication.R;
+import com.khnkoyan.userimagesapplication.UserImageAsyncTask;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.Gender;
 import com.khnkoyan.userimagesapplication.models.User;
@@ -175,10 +176,10 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         user.setEmail(userEmail);
         user.setPassword(passwordMD5);
         user.setUserLoggedIn(true);
-//        ImageAsyncTask imageAsyncTask = new ImageAsyncTask(imageDbManager);
-//        imageAsyncTask.execute(user);
+        UserImageAsyncTask imageAsyncTask = new UserImageAsyncTask(imageDbManager);
+        imageAsyncTask.execute(user);
 
-        imageDbManager.saveUserData(user);
+        //imageDbManager.saveUserData(user);
     }
 
 
