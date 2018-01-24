@@ -5,10 +5,10 @@ import android.os.AsyncTask;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.User;
 
-public class UserImageAsyncTask extends AsyncTask<User, Void, Void>{
+public class SaveUserDataAsyncTask extends AsyncTask<User, Void, Void>{
     private UserImageDbManager imageDbManager;
 
-    public UserImageAsyncTask(UserImageDbManager imageDbManager) {
+    public SaveUserDataAsyncTask(UserImageDbManager imageDbManager) {
         this.imageDbManager = imageDbManager;
     }
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.khnkoyan.userimagesapplication.GetUserDataAsyncTask;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.adapters.ImageListAdapterWithCheckbox;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
@@ -22,7 +23,7 @@ import com.khnkoyan.userimagesapplication.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageListAcivityWithCheckbox extends AppCompatActivity implements View.OnClickListener {
+public class ImageListActivityWithCheckbox extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView recImageListWithCheckbox;
     private CheckBox chBoxAllImage;
@@ -49,11 +50,14 @@ public class ImageListAcivityWithCheckbox extends AppCompatActivity implements V
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-        User user = imageDbManager.getUserDataWithData(userEmail);
-        this.imageList = user.getImageList();
+//        User user = imageDbManager.getUserData(userEmail);
+//        this.imageList = user.getImageList();
+//
+//        adapterWithCheckbox = new ImageListAdapterWithCheckbox(this, imageList);
+//        recImageListWithCheckbox.setAdapter(adapterWithCheckbox);
 
-        adapterWithCheckbox = new ImageListAdapterWithCheckbox(this, imageList);
-        recImageListWithCheckbox.setAdapter(adapterWithCheckbox);
+        GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
+        asyncTask.execute(userEmail);
 
     }
 
@@ -126,7 +130,7 @@ public class ImageListAcivityWithCheckbox extends AppCompatActivity implements V
                         .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 imageDbManager.deleteUserAllImage(userEmail);
-                                Intent intent = new Intent(ImageListAcivityWithCheckbox.this, ProfileActivity.class);
+                                Intent intent = new Intent(ImageListActivityWithCheckbox.this, ProfileActivity.class);
                                 intent.putExtra("email", userEmail);
                                 startActivity(intent);
                             }
@@ -149,7 +153,7 @@ public class ImageListAcivityWithCheckbox extends AppCompatActivity implements V
     }
 
     private void startApp() {
-        Intent intent = new Intent(ImageListAcivityWithCheckbox.this, ImageListAcivityWithCheckbox.class);
+        Intent intent = new Intent(ImageListActivityWithCheckbox.this, ImageListActivityWithCheckbox.class);
         intent.putExtra("login", userEmail);
         startActivity(intent);
     }
@@ -171,5 +175,12 @@ public class ImageListAcivityWithCheckbox extends AppCompatActivity implements V
     protected void onDestroy() {
         super.onDestroy();
         imageDbManager.closeDb();
+    }
+
+    public void getUserData(User user) {
+        this.imageList = user.getImageList();
+
+        adapterWithCheckbox = new ImageListAdapterWithCheckbox(this, imageList);
+        recImageListWithCheckbox.setAdapter(adapterWithCheckbox);
     }
 }

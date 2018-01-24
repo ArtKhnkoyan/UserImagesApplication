@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.khnkoyan.userimagesapplication.GetUserDataAsyncTask;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.adapters.ImageListAdapter;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
@@ -31,15 +32,19 @@ public class ImageListActivity extends AppCompatActivity implements View.OnCreat
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-        User user = imageDbManager.getUserDataWithData(userEmail);
-
-        imageListAdapter = new ImageListAdapter(this, user.getImageList(), imageDbManager, userEmail);
-        recImageList.setAdapter(imageListAdapter);
+//        User user = imageDbManager.getUserData(userEmail);
+        GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
+        asyncTask.execute(userEmail);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         imageDbManager.closeDb();
+    }
+
+    public void getUserData(User user) {
+        imageListAdapter = new ImageListAdapter(this, user.getImageList(), imageDbManager, userEmail);
+        recImageList.setAdapter(imageListAdapter);
     }
 }

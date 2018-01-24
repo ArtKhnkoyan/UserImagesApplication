@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.khnkoyan.userimagesapplication.GetUserDataAsyncTask;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.User;
@@ -74,7 +75,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setEmail = checkAndGetEmail();
 
         isReadStorageAllowed();
-        getUserData(setEmail);
+
+        GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
+        asyncTask.execute(setEmail);
     }
 
     private void bindIds() {
@@ -182,13 +185,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void getUserData(String userEmail) {
-        User getUser = imageDbManager.getUserDataWithData(userEmail);
-        usNameAndSurname.setText(String.valueOf(getUser.getName()) + " " + String.valueOf(getUser.getSurName()));
-        usEmail.setText(String.valueOf(getUser.getEmail()));
-        usPassword.setText(String.valueOf(getUser.getPassword()));
-        usAge.setText(String.valueOf(getUser.getAge()));
-        usGender.setText(String.valueOf(getUser.getGender()));
+    public void getUserData(User user) {
+
+        usNameAndSurname.setText(String.valueOf(user.getName()) + " " + String.valueOf(user.getSurName()));
+        usEmail.setText(String.valueOf(user.getEmail()));
+        usPassword.setText(String.valueOf(user.getPassword()));
+        usAge.setText(String.valueOf(user.getAge()));
+        usGender.setText(String.valueOf(user.getGender()));
     }
 
     @Override
@@ -270,7 +273,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
                 break;
             case R.id.imgListActivity:
-                intent = new Intent(this, ImageListAcivityWithCheckbox.class);
+                intent = new Intent(this, ImageListActivityWithCheckbox.class);
                 intent.putExtra("login", setEmail);
                 startActivity(intent);
                 break;

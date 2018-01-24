@@ -12,9 +12,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.khnkoyan.userimagesapplication.MyMessageDigest;
+import com.khnkoyan.userimagesapplication.SHAUtil;
 import com.khnkoyan.userimagesapplication.R;
-import com.khnkoyan.userimagesapplication.UserImageAsyncTask;
+import com.khnkoyan.userimagesapplication.SaveUserDataAsyncTask;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.Gender;
 import com.khnkoyan.userimagesapplication.models.User;
@@ -38,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private int userAge;
     private String userEmail;
     private String userPassword;
-    private String passwordMD5;
+    private String passwordSHA_1;
     private String userCheckPassword;
     private UserImageDbManager imageDbManager;
 
@@ -168,15 +168,15 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     private void saveUserData() {
         User user = new User();
-        passwordMD5 = MyMessageDigest.makeMD5(userPassword);
+        passwordSHA_1 = SHAUtil.makeSHA_1(userPassword);
         user.setName(userName);
         user.setSurName(userSurName);
         user.setAge(userAge);
         user.setGender(Gender.valueOf(selectGenderType));
         user.setEmail(userEmail);
-        user.setPassword(passwordMD5);
+        user.setPassword(passwordSHA_1);
         user.setUserLoggedIn(true);
-        UserImageAsyncTask imageAsyncTask = new UserImageAsyncTask(imageDbManager);
+        SaveUserDataAsyncTask imageAsyncTask = new SaveUserDataAsyncTask(imageDbManager);
         imageAsyncTask.execute(user);
 
         //imageDbManager.saveUserData(user);

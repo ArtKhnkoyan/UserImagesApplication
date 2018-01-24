@@ -150,7 +150,7 @@ public class UserImageDbManager {
      * @param
      * @return user
      */
-    public User getUserDataWithData(String userEmail) {
+    public User getUserData(String userEmail) {
         db = userMessengerDb.getReadableDatabase();
 
         String selectColumns = "SELECT " + UserImageDb.USER_NAME + ", " + UserImageDb.USER_SURNAME + ", " +

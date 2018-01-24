@@ -5,11 +5,11 @@ import android.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MyMessageDigest {
-    public static String makeMD5(String password) {
+public class SHAUtil {
+    public static String makeSHA_1(String password) {
         String a = null;
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             messageDigest.update(password.getBytes());
             byte[] digest = messageDigest.digest();
             StringBuilder strBuilder = new StringBuilder();
