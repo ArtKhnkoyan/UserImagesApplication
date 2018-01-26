@@ -45,10 +45,6 @@
 
         <activity
             android:name=".activities.ImageListActivity"
-            android:label="@string/title_activity_ImageList"/>
-
-        <activity
-            android:name=".activities.ImageListActivityWithCheckbox"
             android:label="@string/title_activity_ImageListWithCheckbox"/>
     </application>
 

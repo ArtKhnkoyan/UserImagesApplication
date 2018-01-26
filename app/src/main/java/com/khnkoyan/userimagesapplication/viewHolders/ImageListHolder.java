@@ -7,11 +7,11 @@ import android.widget.ImageView;
 
 import com.khnkoyan.userimagesapplication.R;
 
-public class ImageListWithCheckboxHolder extends RecyclerView.ViewHolder {
+public class ImageListHolder extends RecyclerView.ViewHolder {
     private ImageView imgItemWithCheckbox;
     private CheckBox chBoxItem;
 
-    public ImageListWithCheckboxHolder(View itemView) {
+    public ImageListHolder(View itemView) {
         super(itemView);
 
         this.imgItemWithCheckbox = (ImageView) itemView.findViewById(R.id.imgItemWithCheckbox);

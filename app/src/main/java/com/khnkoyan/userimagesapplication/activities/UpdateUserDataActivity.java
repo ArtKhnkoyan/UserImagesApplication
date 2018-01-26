@@ -63,7 +63,6 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
     }
 
     private boolean attemptLogin() {
-        boolean cancel = false;
         userName = edtUpdFirstName.getText().toString();
         userSurName = edtUpdLastName.getText().toString();
 
@@ -79,33 +78,26 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
         }
         if (TextUtils.isEmpty(userName)) {
             edtUpdFirstName.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(userSurName)) {
             edtUpdLastName.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(String.valueOf(userAge)) || (!isUserAgeValid(userAge))) {
             edtUpdAge.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(selectGenderType)) {
             if (!rdUpdGroup.isClickable()) {
                 Toast.makeText(getApplicationContext(), "Please choose your gender", Toast.LENGTH_SHORT).show();
             }
-            cancel = true;
             return false;
         }
-
-        if (!cancel) {
-            updateUserData();
-            Intent intent = new Intent(UpdateUserDataActivity.this, ProfileActivity.class);
-            intent.putExtra("email", userEmail);
-            startActivity(intent);
-        }
+        updateUserData();
+        Intent intent = new Intent(UpdateUserDataActivity.this, ProfileActivity.class);
+        intent.putExtra("email", userEmail);
+        startActivity(intent);
         return true;
     }
 

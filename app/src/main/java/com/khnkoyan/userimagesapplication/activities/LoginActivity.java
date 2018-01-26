@@ -61,38 +61,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         email = mEmailView.getText().toString();
         password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
-            cancel = true;
             return false;
         }
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || (!isPasswordValid(password))) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
-            cancel = true;
             return false;
         }
-        if (!cancel) {
-            String passwordSHA_1 = SHAUtil.makeSHA_1(password);
 
-            boolean emailAndPassExists = imageDbManager.checkUser(email, passwordSHA_1);
-            if (emailAndPassExists) {
-                showProgress(true);
-                imageDbManager.setLogin(true, email);
-                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                intent.putExtra("email", email);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getApplicationContext(), "this email and password not exists", Toast.LENGTH_SHORT).show();
-            }
+        String passwordSHA_1 = SHAUtil.makeSHA_1(password);
+
+        boolean emailAndPassExists = imageDbManager.checkUser(email, passwordSHA_1);
+        if (emailAndPassExists) {
+            showProgress(true);
+            imageDbManager.setLogin(true, email);
+            Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+            intent.putExtra("email", email);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "this email and password not exists", Toast.LENGTH_SHORT).show();
         }
         return true;
     }

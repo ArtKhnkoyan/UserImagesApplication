@@ -1,91 +1,67 @@
 package com.khnkoyan.userimagesapplication.adapters;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.khnkoyan.userimagesapplication.R;
-import com.khnkoyan.userimagesapplication.activities.ProfileActivity;
-import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.Image;
-import com.khnkoyan.userimagesapplication.viewHolders.ImageListViewHolder;
+import com.khnkoyan.userimagesapplication.viewHolders.ImageListHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageListAdapter extends RecyclerView.Adapter<ImageListViewHolder> {
-    private Activity activity;
+public class ImageListAdapter extends RecyclerView.Adapter<ImageListHolder> {
+    private Context context;
     private List<Image> imageList;
-    private UserImageDbManager imageDbManager;
-    private String userLogin;
+    private boolean isSelectedAll;
+    private boolean isClick= true;
 
-    public ImageListAdapter(Activity activity, List<Image> imageList, UserImageDbManager imageDbManager, String userLogin) {
-        this.activity = activity;
+    public ImageListAdapter(Context context, List<Image> imageList) {
+        this.context = context;
         this.imageList = imageList;
-        this.imageDbManager = imageDbManager;
-        this.userLogin = userLogin;
     }
 
     @Override
-    public ImageListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.image_item, viewGroup, false);
-        return new ImageListViewHolder(view);
+    public ImageListHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.image_item_with_checkbox, viewGroup, false);
+        return new ImageListHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ImageListViewHolder holder, final int position) {
-        final byte[] blob = imageList.get(position).getBlob();
-//
+    public void onBindViewHolder(final ImageListHolder holder, final int position) {
+        byte[] blob = imageList.get(position).getBlob();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
+
 //        final BitmapFactory.Options options = new BitmapFactory.Options();
 //        options.inSampleSize = 8;
-        final Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-        holder.getImgView().setImageBitmap(bitmap);
-
-        holder.getImgView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("result", blob);
-                activity.setResult(Activity.RESULT_OK, returnIntent);
-                activity.finish();
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length,options);
+//        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
+        if (!isClick) {
+            if (!isSelectedAll) {
+                holder.getChBoxItem().setChecked(false);
+            } else {
+                holder.getChBoxItem().setChecked(true);
             }
-        });
 
-        holder.getImgItemPoint().setOnClickListener(new View.OnClickListener() {
+        }
+        holder.getChBoxItem().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //creating a popup menu
-                PopupMenu popup = new PopupMenu(activity, holder.getImgItemPoint());
-                //inflating menu from xml resource
-                popup.inflate(R.menu.context_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.itemDelete:
-                                //handle menu1 click
-                                int img_id = imageList.get(position).getId();
-                                imageDbManager.deleteItemImage(img_id);
-                                notifyDataSetChanged();
-                                Intent intent = new Intent(activity, ProfileActivity.class);
-                                intent.putExtra("email", userLogin);
-                                activity.startActivity(intent);
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                //displaying the popup
-                popup.show();
+                isClick = true;
+                if (holder.getChBoxItem().isChecked()) {
+
+                    imageList.get(position).setChecked(true);
+                    notifyDataSetChanged();
+                } else {
+                    imageList.get(position).setChecked(false);
+                    notifyDataSetChanged();
+                }
             }
         });
 
@@ -96,7 +72,19 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListViewHolder> 
         if (imageList == null) {
             imageList = new ArrayList<>();
         }
-        Log.i("log_tag", "imageList.size(): " + imageList.size());
         return imageList.size();
+    }
+
+
+    public void selectAll() {
+        isSelectedAll = true;
+        isClick = false;
+        notifyDataSetChanged();
+    }
+
+    public void deSelectAll() {
+        isSelectedAll = false;
+        isClick = false;
+        notifyDataSetChanged();
     }
 }

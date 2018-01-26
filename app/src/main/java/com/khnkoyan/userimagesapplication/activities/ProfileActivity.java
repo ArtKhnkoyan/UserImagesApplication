@@ -44,7 +44,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView imgHeaderCover;
     private CircleImageView imgProfile;
     private ImageView userUpdateEdit;
-    private ImageButton imgGoToImageListActivity;
     private ImageButton imgSelectGalPhoto;
     private ImageButton imgListActivity;
     private ImageButton imgDoingPhoto;
@@ -67,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         imgHeaderCover.setOnClickListener(this);
         userUpdateEdit.setOnClickListener(this);
-        imgGoToImageListActivity.setOnClickListener(this);
         imgSelectGalPhoto.setOnClickListener(this);
         imgListActivity.setOnClickListener(this);
         imgDoingPhoto.setOnClickListener(this);
@@ -87,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         usNameAndSurname = (TextView) findViewById(R.id.userNameAndSurname);
         usGender = (TextView) findViewById(R.id.usGender);
         usAge = (TextView) findViewById(R.id.usAge);
-        imgGoToImageListActivity = (ImageButton) findViewById(R.id.imgGoToImageListActivity);
         imgSelectGalPhoto = (ImageButton) findViewById(R.id.imgSelectGalPhoto);
         imgListActivity = (ImageButton) findViewById(R.id.imgListActivity);
         imgDoingPhoto = (ImageButton) findViewById(R.id.imgDoingPhoto);
@@ -133,6 +130,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+
         return true;
     }
 
@@ -142,9 +140,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.menuItemA:
-                Toast.makeText(getApplicationContext(), "Item A clicked", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.menuUserDelete:
                 imageDbManager.deleteUserData(setEmail);
                 startActivity(new Intent(this, LoginActivity.class));
@@ -262,21 +257,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("login", setEmail);
                 startActivity(intent);
                 break;
-            case R.id.imgGoToImageListActivity:
+            case R.id.imgListActivity:
                 intent = new Intent(this, ImageListActivity.class);
                 intent.putExtra("login", setEmail);
-                startActivityForResult(intent, MY_IMAGE_GALLERY);
+                startActivity(intent);
                 break;
             case R.id.imgSelectGalPhoto:
                 intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
                 break;
-            case R.id.imgListActivity:
-                intent = new Intent(this, ImageListActivityWithCheckbox.class);
-                intent.putExtra("login", setEmail);
-                startActivity(intent);
-                break;
+
             case R.id.imgDoingPhoto:
                 intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAPTURE_PHOTO);

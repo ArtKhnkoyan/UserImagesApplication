@@ -70,7 +70,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean attemptLogin() {
-        boolean cancel = false;
+
         userName = edtName.getText().toString();
         userSurName = edtSurName.getText().toString();
         userEmail = edtEmail.getText().toString();
@@ -89,64 +89,53 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
         if (TextUtils.isEmpty(userName)) {
             edtName.setError(getString(R.string.error_field_required));
-            cancel = true;
+
             return false;
         }
         if (TextUtils.isEmpty(userSurName)) {
             edtSurName.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         // Check for a valid email address.
         if (TextUtils.isEmpty(userEmail)) {
             edtEmail.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (!isEmailValid(userEmail)) {
             edtEmail.setError(getString(R.string.error_invalid_email));
-            cancel = true;
             return false;
         }
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(userPassword) || (!isPasswordValid(userPassword))) {
             edtPassword.setError(getString(R.string.error_invalid_password));
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(userCheckPassword) || (!isPasswordValid(userCheckPassword))) {
             edtCheckPassword.setError(getString(R.string.error_invalid_password));
-            cancel = true;
             return false;
         }
         if (!userPassword.contentEquals(userCheckPassword)) {
             edtCheckPassword.setError("this password not match");
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(String.valueOf(userAge)) || (!isUserAgeValid(userAge))) {
             edtAge.setError(getString(R.string.error_field_required));
-            cancel = true;
             return false;
         }
         if (TextUtils.isEmpty(selectGenderType)) {
             if (!rdGroup.isClickable()) {
                 Toast.makeText(getApplicationContext(), "Please choose your gender", Toast.LENGTH_SHORT).show();
             }
-            cancel = true;
             return false;
         }
-
-        if (!cancel) {
-            boolean emailExists = imageDbManager.checkUser(userEmail);
-            if (!emailExists) {
-                saveUserData();
-                Intent intent = new Intent(RegistrationActivity.this, ProfileActivity.class);
-                intent.putExtra("email", userEmail);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getApplicationContext(), "this email exists", Toast.LENGTH_LONG).show();
-            }
+        boolean emailExists = imageDbManager.checkUser(userEmail);
+        if (!emailExists) {
+            saveUserData();
+            Intent intent = new Intent(RegistrationActivity.this, ProfileActivity.class);
+            intent.putExtra("email", userEmail);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "this email exists", Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -181,7 +170,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
         //imageDbManager.saveUserData(user);
     }
-
 
 
     @Override

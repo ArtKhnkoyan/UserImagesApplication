@@ -260,7 +260,7 @@ public class UserImageDbManager {
                 new String[]{String.valueOf(img_id)});
     }
 
-    public void deleteUserAllImage(String userEmail) {
+    public void deleteUserAllImages(String userEmail) {
         db = userMessengerDb.getReadableDatabase();
         int img_user_id = selectUserId(userEmail);
         db.delete(UserImageDb.TABLE_USER_IMAGE, UserImageDb.USER_IMAGE_ID + " =?",
