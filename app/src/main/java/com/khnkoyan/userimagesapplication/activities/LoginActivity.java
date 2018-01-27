@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         // Set up the login form.
         bindIds();
-        imageDbManager = new UserImageDbManager(this);
+        imageDbManager = UserImageDbManager.getInstance(this);
     }
 
     private void bindIds() {

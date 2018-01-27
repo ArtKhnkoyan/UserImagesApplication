@@ -18,11 +18,24 @@ public class UserImageDbManager {
     private Context context;
     private UserImageDb userMessengerDb;
     private SQLiteDatabase db;
+    private static UserImageDbManager imageDbManager = null;
 
-    public UserImageDbManager(Context context) {
+    private UserImageDbManager(Context context) {
         this.context = context;
         this.userMessengerDb = new UserImageDb(context);
     }
+
+    public static UserImageDbManager getInstance(Context context) {
+        if (imageDbManager == null) {
+            synchronized (UserImageDbManager.class) {
+                if (imageDbManager == null) {
+                    imageDbManager = new UserImageDbManager(context);
+                }
+            }
+        }
+        return imageDbManager;
+    }
+
 
     public void closeDb() {
         userMessengerDb.close();
@@ -134,12 +147,12 @@ public class UserImageDbManager {
         Cursor cursor = db.query(UserImageDb.TABLE_USER,
                 columns, selection, selectionArgs, null, null, null);
 
-            if (cursor.moveToFirst()) {
-                if (cursor.getCount() > 0) {
-                    cursor.close();
-                    return true;
-                }
+        if (cursor.moveToFirst()) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                return true;
             }
+        }
         cursor.close();
         return false;
     }

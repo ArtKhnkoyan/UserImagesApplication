@@ -52,7 +52,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bindIds();
 
-        imageDbManager = new UserImageDbManager(this);
+        imageDbManager = UserImageDbManager.getInstance(this);
     }
 
     private void bindIds() {

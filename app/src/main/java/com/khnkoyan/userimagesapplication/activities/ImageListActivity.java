@@ -45,7 +45,7 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
         recImageListWithCheckbox.setLayoutManager(new LinearLayoutManager(this));
         chBoxAllImage.setOnClickListener(this);
 
-        this.imageDbManager = new UserImageDbManager(this);
+        this.imageDbManager = UserImageDbManager.getInstance(this);
         whereArgsList = new ArrayList<>();
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");

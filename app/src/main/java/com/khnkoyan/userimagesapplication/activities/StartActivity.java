@@ -16,7 +16,7 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        imageManager = new UserImageDbManager(this);
+        imageManager = UserImageDbManager.getInstance(this);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

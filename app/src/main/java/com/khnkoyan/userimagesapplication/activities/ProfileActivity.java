@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         imgSelectGalPhoto.setOnClickListener(this);
         imgListActivity.setOnClickListener(this);
         imgDoingPhoto.setOnClickListener(this);
-        imageDbManager = new UserImageDbManager(this);
+        imageDbManager = UserImageDbManager.getInstance(this);
         setEmail = checkAndGetEmail();
 
         isReadStorageAllowed();

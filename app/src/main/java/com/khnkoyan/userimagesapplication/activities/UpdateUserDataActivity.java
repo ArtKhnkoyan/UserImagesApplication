@@ -40,7 +40,7 @@ public class UpdateUserDataActivity extends AppCompatActivity implements View.On
 
         bindIds();
 
-        imageDbManager = new UserImageDbManager(this);
+        imageDbManager = UserImageDbManager.getInstance(this);
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
