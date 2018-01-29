@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
             intent.putExtra("email", email);
             startActivity(intent);
+            finish();
         } else {
             Toast.makeText(getApplicationContext(), "this email and password not exists", Toast.LENGTH_SHORT).show();
         }
@@ -145,6 +146,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btnRegistration:
                 startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+                finish();
                 break;
         }
     }

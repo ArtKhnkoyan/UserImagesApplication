@@ -134,6 +134,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             Intent intent = new Intent(RegistrationActivity.this, ProfileActivity.class);
             intent.putExtra("email", userEmail);
             startActivity(intent);
+            finish();
         } else {
             Toast.makeText(getApplicationContext(), "this email exists", Toast.LENGTH_LONG).show();
         }

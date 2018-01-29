@@ -142,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         switch (item.getItemId()) {
             case R.id.menuUserDelete:
                 imageDbManager.deleteUserData(setEmail);
-                startActivity(new Intent(this, LoginActivity.class));
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                 finish();
                 return true;
             case R.id.menuSignOut:
@@ -156,6 +156,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void logOutUser() {
         imageDbManager.setLogin(false, setEmail);
         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+        finish();
     }
 
     private void showDialog() {

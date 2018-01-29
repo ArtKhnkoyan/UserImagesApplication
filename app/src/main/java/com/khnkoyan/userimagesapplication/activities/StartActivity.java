@@ -25,8 +25,10 @@ public class StartActivity extends AppCompatActivity {
                     Intent intent = new Intent(StartActivity.this, ProfileActivity.class);
                     intent.putExtra("email", selectLoginedUser);
                     startActivity(intent);
+                    finish();
                 } else {
                     startActivity(new Intent(StartActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         }, 3000);

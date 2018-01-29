@@ -103,7 +103,8 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
                             for (int i = 0; i < whereArgsList.size(); i++) {
                                 imageDbManager.deleteItemImage(whereArgsList.get(i));
                             }
-                            startApp();
+                            finish();
+                            startActivity(getIntent());
                         }
                     })
                     .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
@@ -151,13 +152,6 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(getApplicationContext(), "didn't choose", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void startApp() {
-        Intent intent = new Intent(ImageListActivity.this, ImageListActivity.class);
-        intent.putExtra("login", userEmail);
-        startActivity(intent);
-    }
-
 
     @Override
     public void onClick(View v) {
