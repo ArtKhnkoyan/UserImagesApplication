@@ -267,10 +267,10 @@ public class UserImageDbManager {
         return selectLoginedUser;
     }
 
-    public void deleteItemImage(int img_id) {
+    public void deleteItemImage(int imgId) {
         db = userMessengerDb.getReadableDatabase();
         db.delete(UserImageDb.TABLE_USER_IMAGE, UserImageDb.IMG_ID + " =?",
-                new String[]{String.valueOf(img_id)});
+                new String[]{String.valueOf(imgId)});
     }
 
     public void deleteUserAllImages(String userEmail) {

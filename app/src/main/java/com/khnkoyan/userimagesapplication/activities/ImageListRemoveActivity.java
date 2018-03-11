@@ -23,17 +23,18 @@ import com.khnkoyan.userimagesapplication.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageListActivity extends AppCompatActivity implements View.OnClickListener {
+public class ImageListRemoveActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView recImageListWithCheckbox;
     private CheckBox chBoxAllImage;
     private UserImageDbManager imageDbManager;
     private ImageListAdapter listAdapter;
-    private String userEmail;
 
     private List<Integer> whereArgsList;
     private List<Image> imageList;
     private boolean isSelected;
+    private String json;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +51,8 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-//        User user = imageDbManager.getUserData(userEmail);
-//        this.imageList = user.getImageList();
-//
-//        adapterWithCheckbox = new ImageListAdapter(this, imageList);
-//        recImageListWithCheckbox.setAdapter(adapterWithCheckbox);
-
         GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
         asyncTask.execute(userEmail);
-
     }
 
     @Override
@@ -96,15 +90,15 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
         }
         if (whereArgsList.size() > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Are you sure you want to exit?")
+            builder.setMessage("Are you sure you want to delete image?")
                     .setCancelable(true)
                     .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             for (int i = 0; i < whereArgsList.size(); i++) {
                                 imageDbManager.deleteItemImage(whereArgsList.get(i));
                             }
-                            finish();
                             startActivity(getIntent());
+                            finish();
                         }
                     })
                     .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
@@ -126,12 +120,12 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
         if (isSelected) {
             if (imageList != null && imageList.size() > 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you want to exit?")
+                builder.setMessage("Are you sure you want to delete all images?")
                         .setCancelable(true)
                         .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 imageDbManager.deleteUserAllImages(userEmail);
-                                Intent intent = new Intent(ImageListActivity.this, ProfileActivity.class);
+                                Intent intent = new Intent(ImageListRemoveActivity.this, ProfileActivity.class);
                                 intent.putExtra("email", userEmail);
                                 startActivity(intent);
                             }
@@ -171,7 +165,7 @@ public class ImageListActivity extends AppCompatActivity implements View.OnClick
         imageDbManager.closeDb();
     }
 
-    public void getUserData(User user) {
+    public void setUserData(User user) {
         this.imageList = user.getImageList();
 
         listAdapter = new ImageListAdapter(this, imageList);

@@ -3,6 +3,8 @@
           package="com.khnkoyan.userimagesapplication">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
@@ -13,8 +15,7 @@
         android:roundIcon="@mipmap/images"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activities.StartActivity">
+        <activity android:name=".activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -39,10 +40,13 @@
         <activity
             android:name=".activities.UpdateUserDataActivity"
             android:label="@string/title_activity_UpdateUserData"/>
-
         <activity
-            android:name=".activities.ImageListActivity"
+            android:name=".activities.ImageListRemoveActivity"
             android:label="@string/title_activity_ImageListWithCheckbox"/>
+        <activity
+            android:name=".activities.ImageActivity"
+            android:label="@string/title_activity_ImageActivity">
+        </activity>
     </application>
 
 </manifest>

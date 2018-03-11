@@ -19,7 +19,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListHolder> {
     private Context context;
     private List<Image> imageList;
     private boolean isSelectedAll;
-    private boolean isClick= true;
+    private boolean isClick = true;
 
     public ImageListAdapter(Context context, List<Image> imageList) {
         this.context = context;
@@ -38,9 +38,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListHolder> {
         Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
         holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
 
-//        final BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inSampleSize = 8;
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length,options);
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 3;
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length, options);
 //        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
         if (!isClick) {
             if (!isSelectedAll) {

@@ -57,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private UserImageDbManager imageDbManager;
     private Bitmap selectBitmap;
     private String setEmail;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,8 +182,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void getUserData(User user) {
-
+    public void setUserData(User user) {
+        this.user = user;
         usNameAndSurname.setText(String.valueOf(user.getName()) + " " + String.valueOf(user.getSurName()));
         usEmail.setText(String.valueOf(user.getEmail()));
         usPassword.setText(String.valueOf(user.getPassword()));
@@ -259,7 +260,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.imgListActivity:
-                intent = new Intent(this, ImageListActivity.class);
+                intent = new Intent(this, ImageActivity.class);
                 intent.putExtra("login", setEmail);
                 startActivity(intent);
                 break;

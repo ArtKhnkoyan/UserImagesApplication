@@ -18,9 +18,13 @@
     </string>
     <string name="title_activity_Registration">RegistrationForm</string>
     <string name="title_activity_ImageList">ImageListActivity</string>
+    <string name="title_activity_ImageActivity">ImageActivity</string>
     <string name="title_activity_ImageListWithCheckbox">ImageListActivity</string>
     <string name="title_activity_Profile">Profile</string>
     <string name="title_activity_UpdateUserData">UpdateDataActivity</string>
     <string name="dialog_yes">yes</string>
     <string name="dialog_no">no</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

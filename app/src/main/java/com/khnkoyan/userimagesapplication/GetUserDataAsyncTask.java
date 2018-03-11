@@ -2,27 +2,31 @@ package com.khnkoyan.userimagesapplication;
 
 import android.os.AsyncTask;
 
-import com.khnkoyan.userimagesapplication.activities.ImageListActivity;
-
+import com.khnkoyan.userimagesapplication.activities.ImageActivity;
+import com.khnkoyan.userimagesapplication.activities.ImageListRemoveActivity;
 import com.khnkoyan.userimagesapplication.activities.ProfileActivity;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.User;
 
 public class GetUserDataAsyncTask extends AsyncTask<String, Void, User> {
     private ProfileActivity profileActivity;
-
-    private ImageListActivity activityWithCheckbox;
+    private ImageListRemoveActivity imgActivity;
     private UserImageDbManager imageDbManager;
+    private ImageActivity imageActivity;
 
     public GetUserDataAsyncTask(ProfileActivity activity, UserImageDbManager imageDbManager) {
         this.profileActivity = activity;
         this.imageDbManager = imageDbManager;
     }
 
-
-    public GetUserDataAsyncTask(ImageListActivity activityWithCheckbox, UserImageDbManager imageDbManager) {
-        this.activityWithCheckbox = activityWithCheckbox;
+    public GetUserDataAsyncTask(ImageListRemoveActivity imgActivity, UserImageDbManager imageDbManager) {
+        this.imgActivity = imgActivity;
         this.imageDbManager = imageDbManager;
+    }
+
+    public GetUserDataAsyncTask(ImageActivity imageActivity) {
+        this.imageActivity = imageActivity;
+        imageDbManager = UserImageDbManager.getInstance(imageActivity);
     }
 
     @Override
@@ -36,10 +40,13 @@ public class GetUserDataAsyncTask extends AsyncTask<String, Void, User> {
     protected void onPostExecute(User user) {
         super.onPostExecute(user);
         if (profileActivity != null) {
-            profileActivity.getUserData(user);
+            profileActivity.setUserData(user);
         }
-        if (activityWithCheckbox != null) {
-            activityWithCheckbox.getUserData(user);
+        if (imgActivity != null) {
+            imgActivity.setUserData(user);
+        }
+        if (imageActivity != null) {
+            imageActivity.setUserData(user);
         }
     }
 }
