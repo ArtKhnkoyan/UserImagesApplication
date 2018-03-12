@@ -35,13 +35,13 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListHolder> {
     @Override
     public void onBindViewHolder(final ImageListHolder holder, final int position) {
         byte[] blob = imageList.get(position).getBlob();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
-
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inSampleSize = 3;
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length, options);
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 //        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length, options);
+        holder.getImgItemWithCheckbox().setImageBitmap(bitmap);
         if (!isClick) {
             if (!isSelectedAll) {
                 holder.getChBoxItem().setChecked(false);

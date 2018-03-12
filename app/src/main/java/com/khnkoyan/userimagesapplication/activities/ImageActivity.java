@@ -5,20 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.khnkoyan.userimagesapplication.GetUserDataAsyncTask;
+import com.khnkoyan.userimagesapplication.GetUserImageListTask;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.adapters.ImagePagerAdapter;
 import com.khnkoyan.userimagesapplication.models.Image;
-import com.khnkoyan.userimagesapplication.models.User;
 
 import java.util.List;
 
 public class ImageActivity extends AppCompatActivity {
     private ViewPager imgPager;
-    private List<Image> imageList;
     private String userEmail;
     private boolean isThereImage;
 
@@ -34,16 +33,16 @@ public class ImageActivity extends AppCompatActivity {
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-        GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this);
+        GetUserImageListTask asyncTask = new GetUserImageListTask(this);
         asyncTask.execute(userEmail);
+        Log.i("myLog", "ImageActivity.onCreate()");
     }
 
-    public void setUserData(User user) {
-        this.imageList = user.getImageList();
-        if (imageList != null) {
-            isThereImage = true;
-            ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(getSupportFragmentManager(), imageList);
+    public void setUserData(List<Image> imageList) {
+        if (imageList != null && imageList.size() > 0) {
+            ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(getSupportFragmentManager(), imageList, userEmail);
             imgPager.setAdapter(imagePagerAdapter);
+            isThereImage = true;
         } else {
             isThereImage = false;
         }
@@ -67,7 +66,6 @@ public class ImageActivity extends AppCompatActivity {
                     Intent intent = new Intent(ImageActivity.this, ImageListRemoveActivity.class);
                     intent.putExtra("login", userEmail);
                     startActivity(intent);
-                    finish();
                 }
                 return true;
             default:

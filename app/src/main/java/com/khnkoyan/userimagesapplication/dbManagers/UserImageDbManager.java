@@ -166,7 +166,7 @@ public class UserImageDbManager {
     public User getUserData(String userEmail) {
         db = userMessengerDb.getReadableDatabase();
 
-        String selectColumns = "SELECT " + UserImageDb.USER_NAME + ", " + UserImageDb.USER_SURNAME + ", " +
+        String sql = "SELECT " + UserImageDb.USER_NAME + ", " + UserImageDb.USER_SURNAME + ", " +
                 UserImageDb.USER_EMAIL + ", " + UserImageDb.USER_PASSWORD + ", " +
                 UserImageDb.USER_AGE + ", " + UserImageDb.USER_GENDER + ", " +
                 UserImageDb.IMAGE + " FROM " + UserImageDb.TABLE_USER +
@@ -177,7 +177,7 @@ public class UserImageDbManager {
 
         String[] selectionArgs = {userEmail};
 
-        Cursor cursor = db.rawQuery(selectColumns, selectionArgs);
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
 
         User userData = new User();
         if (cursor.moveToFirst()) {
@@ -190,7 +190,6 @@ public class UserImageDbManager {
                 userData.setGender(Gender.valueOf(cursor.getString(cursor.getColumnIndex(UserImageDb.USER_GENDER))));
                 byte[] blob = cursor.getBlob(cursor.getColumnIndex(UserImageDb.IMAGE));
                 if (blob != null) {
-
                     List<Image> list = selectBlobOrIdByUserId(userEmail);
                     userData.setImageList(list);
                 }
@@ -200,7 +199,7 @@ public class UserImageDbManager {
         return userData;
     }
 
-    private List<Image> selectBlobOrIdByUserId(String userLogin) {
+    public List<Image> selectBlobOrIdByUserId(String userLogin) {
         List<Image> imageList = new ArrayList<>();
         db = userMessengerDb.getReadableDatabase();
         int user_id = selectUserId(userLogin);

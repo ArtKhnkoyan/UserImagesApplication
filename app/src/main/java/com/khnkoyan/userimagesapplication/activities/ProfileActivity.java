@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +37,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_IMAGE_GALLERY = 1;
-    private static final int MY_IMAGE_GALLERY = 2;
-    private static final int CAPTURE_PHOTO = 3;
+    private static final int CAPTURE_PHOTO = 2;
 
     private static final int STORAGE_PERMISSION_CODE = 0;
+
 
     private ImageView imgHeaderCover;
     private CircleImageView imgProfile;
@@ -74,9 +75,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setEmail = checkAndGetEmail();
 
         isReadStorageAllowed();
-
+        if (getIntent().hasExtra("blob")) {
+            byte[] blob = getIntent().getByteArrayExtra("blob");
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length, options);
+            imgProfile.setImageBitmap(bitmap);
+        }
         GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
         asyncTask.execute(setEmail);
+
     }
 
     private void bindIds() {
@@ -209,21 +217,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             }
-        } else if (requestCode == MY_IMAGE_GALLERY) {
-            if (resultCode == RESULT_OK) {
-                byte[] blob = data.getByteArrayExtra("result");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-                imgProfile.setImageBitmap(bitmap);
-            }
         } else if (requestCode == CAPTURE_PHOTO) {
             if (resultCode == RESULT_OK) {
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 byte[] blob = getImageBytes(bitmap);
                 //    Saving to Database...
                 imageDbManager.saveImageDb(blob, setEmail);
-                imgProfile.setImageBitmap(bitmap);
             }
         }
+        Log.i("myLog", "ProfileActivity.onActivityResult()");
     }
 
     private byte[] getImageBytes(Bitmap bitmap) {

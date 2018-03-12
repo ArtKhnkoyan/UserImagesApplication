@@ -13,12 +13,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-import com.khnkoyan.userimagesapplication.GetUserDataAsyncTask;
+import com.khnkoyan.userimagesapplication.GetUserImageListTask;
 import com.khnkoyan.userimagesapplication.R;
 import com.khnkoyan.userimagesapplication.adapters.ImageListAdapter;
 import com.khnkoyan.userimagesapplication.dbManagers.UserImageDbManager;
 import com.khnkoyan.userimagesapplication.models.Image;
-import com.khnkoyan.userimagesapplication.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class ImageListRemoveActivity extends AppCompatActivity implements View.O
     private List<Integer> whereArgsList;
     private List<Image> imageList;
     private boolean isSelected;
-    private String json;
     private String userEmail;
 
     @Override
@@ -51,7 +49,7 @@ public class ImageListRemoveActivity extends AppCompatActivity implements View.O
         if (getIntent().hasExtra("login")) {
             userEmail = getIntent().getStringExtra("login");
         }
-        GetUserDataAsyncTask asyncTask = new GetUserDataAsyncTask(this, imageDbManager);
+        GetUserImageListTask asyncTask = new GetUserImageListTask(this, imageDbManager);
         asyncTask.execute(userEmail);
     }
 
@@ -149,25 +147,20 @@ public class ImageListRemoveActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        isSelected = true;
+
         if (v.getId() == R.id.chBoxAllImage) {
             if (chBoxAllImage.isChecked()) {
+                isSelected = true;
                 listAdapter.selectAll();
             } else {
                 listAdapter.deSelectAll();
+                isSelected = false;
             }
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        imageDbManager.closeDb();
-    }
-
-    public void setUserData(User user) {
-        this.imageList = user.getImageList();
-
+    public void setUserData(List<Image> imageList) {
+        this.imageList = imageList;
         listAdapter = new ImageListAdapter(this, imageList);
         recImageListWithCheckbox.setAdapter(listAdapter);
     }
