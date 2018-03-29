@@ -66,6 +66,7 @@ public class ImageActivity extends AppCompatActivity {
                     Intent intent = new Intent(ImageActivity.this, ImageListRemoveActivity.class);
                     intent.putExtra("login", userEmail);
                     startActivity(intent);
+                    finish();
                 }
                 return true;
             default:

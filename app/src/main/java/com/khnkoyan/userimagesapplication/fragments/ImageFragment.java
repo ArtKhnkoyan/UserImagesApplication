@@ -60,6 +60,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         imgFragment = (ImageView) view.findViewById(R.id.imgFragment);
         imgFragment.setOnClickListener(this);
+
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.length);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
@@ -69,9 +70,11 @@ public class ImageFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), ProfileActivity.class);
-        intent.putExtra(IMAGE_LIST, blob);
-        intent.putExtra(USER_EMAIL, userEmail);
-        startActivity(intent);
+        if (v.getId() == R.id.imgFragment) {
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            intent.putExtra(IMAGE_LIST, blob);
+            intent.putExtra(USER_EMAIL, userEmail);
+            startActivity(intent);
+        }
     }
 }

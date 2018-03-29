@@ -34,10 +34,4 @@ public class StartActivity extends AppCompatActivity {
         }, 3000);
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        imageManager.closeDb();
-    }
 }

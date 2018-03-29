@@ -5,12 +5,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/colorAccent"
-              android:padding="16dp"
+              android:padding="3dp"
               tools:context=".activities.StartActivity">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/images"/>
+        android:src="@drawable/welcome"
+        tools:ignore="ContentDescription"/>
 </LinearLayout>
